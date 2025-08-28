@@ -1,0 +1,93 @@
+# MLB StatsAPI Live Game Endpoints Documentation
+
+
+## 1. Endpoint: `/api/v1.1/game/{game_pk}/feed/live`
+- **Method:** GET
+- **Description:** Get live game status. This API can return very large payloads. It is strongly recommended that clients ask for diffs and use the "Accept-Encoding: gzip" header.
+
+### Path Parameters:
+- `game_pk` (integer, required): Unique Primary Key Representing a Game
+
+### Query Parameters:
+- `timecode` (string, optional): Use this parameter to return a snapshot of the data at the specified time. Format: `YYYYMMDD_HHMMSS`
+- `fields` (array of strings, optional): Intended to filter the response, but in testing, this parameter returns an empty object `{}`. It may not be supported or may require a different format.
+- `inclusiveTimecode` (boolean, optional): Intended to include plays before or at the specified timecode. In testing, this parameter did not visibly alter the output.
+- `accent` (boolean, optional): Intended to return names with accents. In testing, this parameter did not visibly alter the output.
+
+### Usage Example:
+```
+GET /api/v1.1/game/776567/feed/live
+```
+- Replace `776567` with the desired game primary key.
+- For large payloads, use the header: `Accept-Encoding: gzip`
+
+#### Notes from Testing:
+- The endpoint returns a detailed JSON object with game, team, player, and status info.
+- The `fields` parameter does not filter the response as expected (returns `{}`).
+- The `accent` and `inclusiveTimecode` parameters do not visibly change the output for this test case.
+
+---
+
+
+## 2. Endpoint: `/api/v1.1/game/{game_pk}/feed/live/timestamps`
+- **Method:** GET
+- **Description:** Retrieve all of the play timestamps for a game. This can be used for replaying games. Endpoint returns all of the timecodes that can be used with diffs for `/v1/game/{game_pk}/feed/live`.
+
+### Path Parameters:
+- `game_pk` (integer, required): Unique Primary Key Representing a Game
+
+### Usage Example:
+```
+GET /api/v1.1/game/776567/feed/live/timestamps
+```
+- Returns a JSON array of timecode strings, e.g.:
+```
+[
+	"20250827_183753",
+	...
+	"20250827_231301"
+]
+```
+
+---
+
+
+## 3. Endpoint: `/api/v1.1/game/{game_pk}/feed/live/diffPatch`
+- **Method:** GET
+- **Description:** Get live game status diffPatch. This endpoint allows comparison of game files and shows any differences/discrepancies between the two. 
+
+#### Diff/Patch System Usage:
+1. Request full payload by not passing `startTimecode` or `endTimecode`. This will return the most recent game state.
+2. Find the latest timecode in this response.
+3. Wait X seconds.
+4. Use the timecode from step 2 as the `startTimecode`. This will give you a diff of everything that has happened since `startTimecode`.
+5. If no data is returned, wait X seconds and do the same request.
+6. If data is returned, get a new timeStamp from the response, and use that for the next call as `startTimecode`.
+
+### Path Parameters:
+- `game_pk` (integer, required): Unique Primary Key Representing a Game
+
+### Query Parameters:
+- `startTimecode` (string, optional): The starting timecode for the diff.
+- `endTimecode` (string, optional): The ending timecode for the diff.
+
+### Usage Example:
+```
+GET /api/v1.1/game/776567/feed/live/diffPatch?startTimecode=20250827_230753&endTimecode=20250827_231301
+```
+- Returns an empty array `[]` if there are no changes between the timecodes.
+- If no params are provided, returns the full game state object (similar to `/feed/live`).
+
+---
+
+
+## General Notes
+- All endpoints require a valid `game_pk` (game primary key) in the path.
+- For large responses, use the `Accept-Encoding: gzip` header to reduce payload size.
+- The `fields` parameter does not appear to be supported as documented (returns `{}` in testing).
+- The `accent` and `inclusiveTimecode` parameters did not visibly alter the output in this test.
+- The diffPatch endpoint returns an empty array if there are no changes between the specified timecodes.
+
+---
+
+**This documentation was generated from the StatsAPI-Spec.json file.**
