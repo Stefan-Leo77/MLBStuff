@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLB Live Game Viewer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-baseball-ball"></i> MLB Live Game Viewer</h1>
+            <div class="header-controls">
+                <div class="date-selector">
+                    <button id="prev-date">&lt;</button>
+                    <input type="date" id="date-picker" value="{{ date }}">
+                    <button id="next-date">&gt;</button>
+                    <button id="today-btn">Today</button>
+                </div>
+                <div class="data-source-toggle">
+                    <span>Data Source:</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="data-source-toggle" {% if use_live_data %}checked{% endif %}>
+                        <label for="data-source-toggle" class="toggle-label">
+                            <span class="toggle-inner"></span>
+                            <span class="toggle-switch"></span>
+                        </label>
+                    </div>
+                    <span id="data-source-label">{{ 'LIVE MLB API' if use_live_data else 'LOCAL TEST DATA' }}</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Scoreboard Section -->
+        <section id="scoreboard" class="content-section">
+            <h2>Today's Games</h2>
+            <div id="games-container" class="scoreboard-grid">
+                <!-- Games will be loaded here dynamically -->
+                <div class="loading">Loading games...</div>
+            </div>
+        </section>
+
+        <!-- Game Detail Section (Hidden initially) -->
+        <section id="game-detail" class="content-section hidden">
+            <div class="game-header">
+                <button id="back-to-scoreboard" class="btn"><i class="fas fa-arrow-left"></i> Back to Scoreboard</button>
+                <h2 id="game-title">Game Details</h2>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="box-score">Box Score</button>
+                <button class="tab-btn" data-tab="at-bat">Live At-Bat</button>
+                <button class="tab-btn" data-tab="play-by-play">Play-By-Play</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Box Score Tab -->
+                <div id="box-score" class="tab-pane active">
+                    <div class="score-summary">
+                        <!-- Team scores will be loaded here -->
+                    </div>
+                    
+                    <div class="box-score-container">
+                        <h3>Box Score</h3>
+                        <div class="inning-scores">
+                            <!-- Inning-by-inning scores will be loaded here -->
+                        </div>
+                        
+                        <div class="team-tabs">
+                            <button class="team-tab active" data-team="away">Away Team</button>
+                            <button class="team-tab" data-team="home">Home Team</button>
+                        </div>
+                        
+                        <div class="batting-stats team-stats active" data-team="away">
+                            <h4>Batting</h4>
+                            <div class="stats-table batting">
+                                <!-- Away team batting stats will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="pitching-stats team-stats" data-team="away">
+                            <h4>Pitching</h4>
+                            <div class="stats-table pitching">
+                                <!-- Away team pitching stats will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="batting-stats team-stats" data-team="home">
+                            <h4>Batting</h4>
+                            <div class="stats-table batting">
+                                <!-- Home team batting stats will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="pitching-stats team-stats" data-team="home">
+                            <h4>Pitching</h4>
+                            <div class="stats-table pitching">
+                                <!-- Home team pitching stats will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Live At-Bat Tab -->
+                <div id="at-bat" class="tab-pane">
+                    <div class="at-bat-container">
+                        <div class="game-info">
+                            <!-- Game info will be loaded here -->
+                        </div>
+                        
+                        <div class="field-container">
+                            <div class="field">
+                                <div class="diamond">
+                                    <div class="base first-base" data-occupied="false"></div>
+                                    <div class="base second-base" data-occupied="false"></div>
+                                    <div class="base third-base" data-occupied="false"></div>
+                                    <div class="base home-plate"></div>
+                                </div>
+                                <div class="pitcher-mound"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="current-at-bat">
+                            <div class="matchup">
+                                <div class="batter">
+                                    <!-- Batter info will be loaded here -->
+                                </div>
+                                <div class="vs">VS</div>
+                                <div class="pitcher">
+                                    <!-- Pitcher info will be loaded here -->
+                                </div>
+                            </div>
+                            
+                            <div class="count">
+                                <div class="balls">Balls: <span>0</span></div>
+                                <div class="strikes">Strikes: <span>0</span></div>
+                                <div class="outs">Outs: <span>0</span></div>
+                            </div>
+                            
+                            <div class="pitch-zone">
+                                <div class="strike-zone"></div>
+                                <!-- Pitch locations will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Play-By-Play Tab -->
+                <div id="play-by-play" class="tab-pane">
+                    <div class="plays">
+                        <!-- Play-by-play data will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 MLB Live Game Viewer | Data provided by MLB StatsAPI</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scoreboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/boxscore.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/atbat.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/playbyplay.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

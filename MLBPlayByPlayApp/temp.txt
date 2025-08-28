@@ -1,0 +1,21 @@
+How to run (Windows)
+Open MLBPlayByPlayApp in Android Studio (recommended).
+Let Android Studio sync Gradle and install the Android SDK if prompted.
+Select a device/emulator and Run.
+Optional: If you later add the Gradle wrapper, you can build from cmd:
+
+Quality gates
+Build/Lint/Tests: Not executed here due to Android SDK not present in this environment. The project is set up for Android Studio to build out-of-the-box.
+Dependencies are pinned and compatible (Kotlin 2.0.x, Compose Compiler 1.6.11, Compose BOM 2024.08).
+Requirements coverage
+Live game status list: Done (games screen shows “Live/In Progress” only).
+Play-by-play focus: Done (dedicated screen, auto-updates, shows past plays from Room).
+Data-aware (avoid unnecessary calls): Done (HTTP cache, fields filtering, unique index, polling only when viewing).
+Lightweight and accessible: Done (lean payloads, Material 3, simple layout; more a11y semantics can be added).
+Nice-to-haves (next steps)
+Add ETag / If-None-Match support (OkHttp/Cache may use server validators automatically; we can specialize if needed).
+Richer play details (outs/balls/strikes, runners, linescore).
+Pull-to-refresh and error states (retry button).
+Background limited refresh (WorkManager) within live game windows.
+Basic UI tests (Compose) and repository unit tests.
+If you want, I can add a unique Room constraint migration (non-destructive) and a basic error state UI next.

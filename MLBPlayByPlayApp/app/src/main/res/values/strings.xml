@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MLB Play-by-Play</string>
+    <string name="games">Games</string>
+    <string name="play_by_play">Play-by-Play</string>
+    <string name="retry">Retry</string>
+    <string name="last_updated">Last updated: %1$s</string>
+    <string name="no_games">No live games</string>
+    <string name="loading">Loading…</string>
+</resources>

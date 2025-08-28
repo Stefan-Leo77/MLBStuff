@@ -1,0 +1,826 @@
+/* General Styles */
+:root {
+    --mlb-blue: #002d72;
+    --mlb-red: #e81828;
+    --light-gray: #f5f5f5;
+    --medium-gray: #e0e0e0;
+    --dark-gray: #333333;
+    --accent-color: #0099cc;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --error-color: #f44336;
+    --toggle-bg-color: #ccc;
+    --toggle-active-color: #4caf50;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+h1, h2, h3, h4 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+    color: var(--accent-color);
+}
+
+.hidden {
+    display: none;
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #007baa;
+}
+
+/* Header Styles */
+header {
+    background-color: var(--mlb-blue);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+header h1 i {
+    margin-right: 10px;
+    color: var(--mlb-red);
+}
+
+.header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Data Source Toggle */
+.data-source-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+#data-source-label {
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--toggle-bg-color);
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.toggle-label:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-label {
+    background-color: var(--toggle-active-color);
+}
+
+input:checked + .toggle-label:before {
+    transform: translateX(26px);
+}
+
+.date-selector input {
+    padding: 8px;
+    border: 1px solid var(--medium-gray);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.date-selector button {
+    background-color: white;
+    border: 1px solid var(--medium-gray);
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.date-selector button:hover {
+    background-color: var(--medium-gray);
+}
+
+#today-btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+}
+
+#today-btn:hover {
+    background-color: #007baa;
+}
+
+/* Main Content Styles */
+main {
+    padding: 2rem 0;
+}
+
+.content-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Scoreboard Styles */
+.scoreboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.game-card {
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.game-status {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.game-status.final {
+    background-color: var(--dark-gray);
+    color: white;
+}
+
+.game-status.live {
+    background-color: var(--mlb-red);
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.game-status.preview {
+    background-color: var(--mlb-blue);
+    color: white;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+.team-row {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.team-row:last-child {
+    border-bottom: none;
+}
+
+.team-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.team-logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 1rem;
+    object-fit: contain;
+}
+
+.team-name {
+    font-weight: bold;
+}
+
+.team-record {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+.team-score {
+    font-size: 1.8rem;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+}
+
+.winner {
+    font-weight: bold;
+}
+
+.game-details {
+    padding: 0.5rem;
+    background-color: var(--light-gray);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+/* Game Detail Styles */
+.game-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+#back-to-scoreboard {
+    margin-right: 1rem;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+    display: flex;
+    border-bottom: 1px solid var(--medium-gray);
+    margin-bottom: 1rem;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+}
+
+.tab-btn.active {
+    border-bottom-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* Tab Content */
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Box Score Styles */
+.score-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+}
+
+.team-summary {
+    display: flex;
+    align-items: center;
+}
+
+.team-summary img {
+    width: 60px;
+    height: 60px;
+    margin-right: 1rem;
+}
+
+.team-summary .name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.team-summary .score {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-left: 1.5rem;
+}
+
+.vs {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 0 1.5rem;
+}
+
+.inning-scores {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+.inning-scores table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.inning-scores th, 
+.inning-scores td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid var(--medium-gray);
+}
+
+.inning-scores th {
+    background-color: var(--light-gray);
+    font-weight: bold;
+}
+
+.inning-scores .team-name {
+    text-align: left;
+    font-weight: bold;
+    padding-left: 1rem;
+}
+
+.team-tabs {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.team-tab {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+}
+
+.team-tab.active {
+    border-bottom-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.team-stats {
+    display: none;
+}
+
+.team-stats.active {
+    display: block;
+}
+
+.stats-table {
+    overflow-x: auto;
+}
+
+.stats-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.stats-table th, 
+.stats-table td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid var(--medium-gray);
+}
+
+.stats-table th {
+    background-color: var(--light-gray);
+    font-weight: bold;
+}
+
+.stats-table .player-name {
+    text-align: left;
+    font-weight: 600;
+}
+
+.stats-table .position {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+/* At-Bat Styles */
+.at-bat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.game-info {
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.field-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.field {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background-color: #4c8c4a; /* Field green */
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.diamond {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 140px;
+    height: 140px;
+    background-color: #be8a5a; /* Dirt brown */
+}
+
+.base {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 1px solid #666;
+}
+
+.base[data-occupied="true"] {
+    background-color: var(--mlb-red);
+}
+
+.first-base {
+    top: 0;
+    right: 0;
+}
+
+.second-base {
+    top: 0;
+    left: 0;
+}
+
+.third-base {
+    bottom: 0;
+    left: 0;
+}
+
+.home-plate {
+    bottom: 0;
+    right: 0;
+    transform: rotate(-45deg);
+    width: 25px;
+    height: 25px;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.pitcher-mound {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background-color: #be8a5a; /* Dirt brown */
+    border-radius: 50%;
+}
+
+.matchup {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+}
+
+.batter, .pitcher {
+    text-align: center;
+}
+
+.batter img, .pitcher img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+}
+
+.batter .name, .pitcher .name {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.batter .stats, .pitcher .stats {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.vs {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.count {
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.pitch-zone {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    margin: 0 auto;
+    background-color: var(--light-gray);
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+}
+
+.strike-zone {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 150px;
+    border: 2px solid var(--dark-gray);
+}
+
+.pitch {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pitch.ball {
+    background-color: var(--warning-color);
+}
+
+.pitch.strike {
+    background-color: var(--error-color);
+}
+
+.pitch.in-play {
+    background-color: var(--success-color);
+}
+
+/* Play-By-Play Styles */
+.plays {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.play {
+    padding: 1rem;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.play:last-child {
+    border-bottom: none;
+}
+
+.play-inning {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.play-description {
+    line-height: 1.5;
+}
+
+.inning-header {
+    background-color: var(--light-gray);
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    border-left: 5px solid var(--mlb-blue);
+    font-weight: bold;
+}
+
+/* Loading Styles */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.loading:after {
+    content: "...";
+    animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: "."; }
+    40% { content: ".."; }
+    60%, 100% { content: "..."; }
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--mlb-blue);
+    color: white;
+    padding: 1.5rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Notification Styles */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    max-width: 100%;
+    z-index: 1000;
+}
+
+.notification {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    animation: slideIn 0.3s ease-out forwards;
+    opacity: 0;
+    transform: translateX(50px);
+}
+
+.notification.fade-out {
+    animation: fadeOut 0.3s ease-in forwards;
+}
+
+.notification i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.notification span {
+    flex-grow: 1;
+    font-size: 0.9rem;
+}
+
+.notification button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--dark-gray);
+    opacity: 0.6;
+    padding: 0 5px;
+}
+
+.notification button:hover {
+    opacity: 1;
+}
+
+.notification.info i {
+    color: var(--accent-color);
+}
+
+.notification.success i {
+    color: var(--success-color);
+}
+
+.notification.warning i {
+    color: var(--warning-color);
+}
+
+.notification.error i {
+    color: var(--error-color);
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .scoreboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .score-summary {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .team-summary {
+        justify-content: center;
+    }
+    
+    .vs {
+        margin: 1rem 0;
+    }
+    
+    .matchup {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .header-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .data-source-toggle {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+    }
+}
